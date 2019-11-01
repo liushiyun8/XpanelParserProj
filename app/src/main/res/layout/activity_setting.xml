@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:orientation="vertical" >
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="布局模式："/>
+			<Spinner
+				android:id="@+id/spinner"
+				android:layout_width="150dp"
+				android:layout_height="40dp"
+				android:contentDescription="布局模式">
+			</Spinner>
+		</LinearLayout>
+
+	    <TextView
+	        android:id="@+id/textView_1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="10dp"
+	        android:background="#a80c9df0"
+	        android:text="setting 1" />
+	    
+	    <TextView
+	        android:id="@+id/textView_2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:padding="10dp"
+	        android:background="#a80c9df0"
+	        android:visibility="visible"
+	        android:text="settings 2" />
+	    
+	    <TextView
+	        android:id="@+id/textView_3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:padding="10dp"
+	        android:background="#a80c9df0"
+	        android:text="setting 3" />
+	    <TextView
+	        android:id="@+id/textView_4"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:padding="10dp"
+	        android:background="#a80c9df0"
+	        android:text="setting 4" />
+        
+	    <AbsoluteLayout 
+	        android:id="@+id/test_page_container"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content">
+	    </AbsoluteLayout>
+    </LinearLayout>
+    
+
+    
+</FrameLayout>

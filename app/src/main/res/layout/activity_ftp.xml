@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ftp server no start" />
+    <Button 
+        android:id="@+id/start_ftp_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="start ftp server"/>
+    
+    <TextView android:id="@+id/status_tv"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+        <Button 
+            android:id="@+id/decompress_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" decompress zip"/>
+        <Button 
+            android:id="@+id/resolve_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" resolve gui file"/>
+    </LinearLayout>
+    
+    <Button 
+        android:id="@+id/delete_project"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="delete project dir"/>
+
+</LinearLayout>

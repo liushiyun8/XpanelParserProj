@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <TextView 
+        android:id="@+id/textview_hello"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hello"/>
+    <FrameLayout 
+        android:layout_width="350dp"
+        android:layout_height="350dp">        
+	    <FrameLayout 
+	        android:id="@+id/surface_layout"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content">
+	        
+		    <SurfaceView 
+		        android:id="@+id/surface_view_vlc"
+		        android:layout_width="300dp"
+		        android:layout_height="300dp"/>
+		    <SurfaceView 
+		        android:id="@+id/surface_view_subtitle_vlc"
+		        android:layout_width="300dp"
+		        android:layout_height="300dp"/>
+	    </FrameLayout>
+    </FrameLayout>
+    
+    <Button 
+        android:id="@+id/btn_vlc_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="vlc_play"/>
+    <Button 
+        android:id="@+id/btn_vlc_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="vlc_pause"/>
+
+</LinearLayout>

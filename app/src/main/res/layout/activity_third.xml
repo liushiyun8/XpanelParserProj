@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/third_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#8090c0f0"
+    android:orientation="vertical">
+
+<!--    android:background="#c09a0b"-->
+    <AbsoluteLayout 
+        android:id="@+id/page_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_gravity="center_horizontal">
+    </AbsoluteLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:visibility="visible"
+        android:layout_gravity="center_horizontal"
+        android:text="title" />
+    <ImageView
+        android:id="@+id/state_img"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/round_red"/>
+    <TextView
+        android:id="@+id/state_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
+        android:layout_marginStart="3dp"
+        android:layout_toRightOf="@id/state_img"
+        android:text="tcp 链接状态"/>
+
+    <SlidingDrawer
+        android:id="@+id/sliding_drawer"
+        android:layout_width="100dp"
+        android:layout_height="300dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:handle="@id/handle_img"
+        android:content="@id/content_layout"
+        android:orientation="horizontal"
+        android:background="@null">
+        <ImageView
+            android:id="@+id/handle_img"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/left_arrow"/>
+        <LinearLayout
+            android:id="@+id/content_layout"
+            android:layout_width="80dp"
+            android:layout_height="300dp"
+            android:background="#3feaf0f0"
+            android:orientation="vertical">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/sliding_drawer_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </SlidingDrawer>
+
+</RelativeLayout>

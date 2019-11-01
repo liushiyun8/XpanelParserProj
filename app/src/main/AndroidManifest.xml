@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.zff.xpanel.parser">
+    
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name="com.zff.xpanel.parser.ui.WelcomeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- android:theme="@style/FullscreenTheme"  --> 
+        <!--  <activity android:name="com.zff.xpanel.parser.ui.MainActivity"></activity>-->
+        <activity android:name=".ui.PermissionsActivity"
+            android:theme="@style/Theme.AppCompat"/>
+        <activity android:name="com.zff.xpanel.parser.FullscreenActivity"/>
+        <activity android:name="com.zff.xpanel.parser.ui.SecondActivity"/>
+        <activity android:name="com.zff.xpanel.parser.ui.ConnectActivity"/>
+        <activity android:name=".ui.SettingActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name="com.zff.xpanel.parser.ui.ThirdActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
+            android:screenOrientation="landscape"/>
+        
+        <service android:name="com.zff.ftp.ZffFtpServer"/>
+    </application>
+
+</manifest>
