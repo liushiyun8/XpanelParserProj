@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.zff.ftp.ZffFtpServer;
+import com.zff.utils.AssetUtils;
 import com.zff.utils.DecompressJar;
 import com.zff.utils.FileTools;
 import com.zff.utils.NetworkTools;
@@ -27,6 +28,7 @@ import com.zff.xpanel.parser.util.GuiFileResolve;
 import com.zff.xpanel.parser.util.Properties;
 
 import java.io.File;
+import java.io.IOException;
 
 public class WelcomeActivity extends BaseActivity {
 
@@ -150,6 +152,11 @@ public class WelcomeActivity extends BaseActivity {
      * 加载数据，真正数据的解析开始
      */
     private void loadData(){
+        try {
+            AssetUtils.copyAssetFileToFile(this,Constant.FTP_UPLOAD_DIR+File.separator+"page.zip","page.zip");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String launcherPage = Properties.getInstant(this).getLauncherPageName();
         if(TextUtils.isEmpty(launcherPage)){
             isFinishAsyncTask = false;

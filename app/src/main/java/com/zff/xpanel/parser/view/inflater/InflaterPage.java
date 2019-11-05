@@ -12,12 +12,11 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -55,7 +54,7 @@ import android.widget.VideoView;
 import com.zff.xpanel.parser.util.Properties;
 import com.zff.xpanel.parser.util.Constant;
 import com.zff.xpanel.parser.view.ButtonArgs;
-import com.zff.xpanel.parser.view.Color;
+import com.zff.xpanel.parser.view.MyColor;
 import com.zff.xpanel.parser.view.EditTextArgs;
 import com.zff.xpanel.parser.view.GaugeArgs;
 import com.zff.xpanel.parser.view.ImgViewArgs;
@@ -317,7 +316,7 @@ public class InflaterPage {
 		}
 		if(themeValue != null){				
 			textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, themeValue.fontSize * properties.getTextSizeRatio());
-			textView.setTextColor(Color.getColorValue(themeValue.fontColor));
+			textView.setTextColor(MyColor.getColorValue(themeValue.fontColor));
 			textView.setBackground(new BitmapDrawable(Constant.IMG_RES_DIR+"/"+themeValue.backgoundImg));
 		}
 		//textView.setBackgroundColor(0x9ac865a9);
@@ -362,7 +361,7 @@ public class InflaterPage {
 		}
 		if(themeValue != null){				
 			editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, themeValue.fontSize * properties.getTextSizeRatio());
-			editText.setTextColor(Color.getColorValue(themeValue.fontColor));
+			editText.setTextColor(MyColor.getColorValue(themeValue.fontColor));
 			editText.setBackground(new BitmapDrawable(Constant.IMG_RES_DIR+"/"+themeValue.backgoundImg));
 		}else{			
 			editText.setBackground(null);
@@ -428,7 +427,7 @@ public class InflaterPage {
 			int[] colors = new int[2];
 			StateListDrawable sld = new StateListDrawable();
 			if(activeThemeValue != null){
-				colors[0] = Color.getColorValue(activeThemeValue.fontColor);
+				colors[0] = MyColor.getColorValue(activeThemeValue.fontColor);
 				sld.addState(new int[]{android.R.attr.state_selected},
 						new BitmapDrawable(Constant.IMG_RES_DIR+"/"+ activeThemeValue.backgoundImg));
 				if(btnArgs.isMockPress()){
@@ -438,7 +437,8 @@ public class InflaterPage {
 			}
 			if(inactiveThemeValue != null){
 				button.setTextSize(TypedValue.COMPLEX_UNIT_PX, inactiveThemeValue.fontSize * properties.getTextSizeRatio());
-				colors[1] = Color.getColorValue(inactiveThemeValue.fontColor);
+//				colors[1] = MyColor.getColorValue(inactiveThemeValue.fontColor);
+				colors[1] = MyColor.getColorValue(inactiveThemeValue.fontColor);
 				sld.addState(new int[]{}, new BitmapDrawable(Constant.IMG_RES_DIR+"/"+ inactiveThemeValue.backgoundImg));
 			}
 			ColorStateList csl = new ColorStateList(states, colors);
@@ -447,7 +447,7 @@ public class InflaterPage {
 		}
 		
 		//ColorUtils.RGBToHSL(arg0, arg1, arg2, arg3);
-		//android.graphics.Color color = new android.graphics.Color();
+		//android.graphics.MyColor color = new android.graphics.MyColor();
 		//ColorStateList csl = new ColorStateList(states, colors)
 		button.setOnClickListener(mBtnOnClickListener);
 		button.setOnTouchListener(mBtnOnTouchListener);

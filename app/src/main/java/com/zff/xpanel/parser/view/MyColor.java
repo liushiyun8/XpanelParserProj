@@ -1,6 +1,6 @@
 package com.zff.xpanel.parser.view;
 
-public class Color {
+public class MyColor {
 
 	public static final String GRAY = "Gray";
 	public static final String YELLOW = "Yellow";
@@ -9,11 +9,11 @@ public class Color {
 	public static final String BLACK = "Black";
 	
 
-	public static final int GRAY_VALUE = 0xafa0a0a0;//灰色
-	public static final int YELLOW_VALUE = 0xfecf9f0f;//黄色
-	public static final int WHITE_VALUE = 0xfeffffff;//白色
-	public static final int RED_VALUE = 0xfecf0f0f;//红色
-	public static final int BLACK_VALUE = 0xfe0f0f0f;//黑色
+	public static final int GRAY_VALUE = 0xFF808080;//灰色
+	public static final int YELLOW_VALUE = 0xFFFFFF00;//黄色
+	public static final int WHITE_VALUE = 0xFFFFFFFF;//白色
+	public static final int RED_VALUE = 0xFFFF0000;//红色
+	public static final int BLACK_VALUE = 0xFF000000;//黑色
 	
 	public static final int SKY_BLUE = 0xa80c9df0;//淡蓝色，天蓝色
 	public static final int PINK_VALUE = 0x9ac865a9;//粉色

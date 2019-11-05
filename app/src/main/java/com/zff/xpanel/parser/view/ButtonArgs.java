@@ -8,7 +8,7 @@ public class ButtonArgs extends TextViewArgs{
 	private Content activeContent;
 	private Content inactiveContent;
 	//是否模拟按下效果
-	private boolean isMockPress = false;
+	private boolean isMockPress = true;
 	//是否锁定按下
 	private boolean isLockPressed = false;
 

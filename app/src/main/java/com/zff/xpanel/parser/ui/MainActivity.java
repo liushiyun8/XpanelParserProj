@@ -1,30 +1,21 @@
 package com.zff.xpanel.parser.ui;
 
 
-import com.zff.ftp.ZffFtpServer;
-import com.zff.ftp.ZffFtpServer.MyBinder;
+import com.zff.utils.AssetUtils;
 import com.zff.utils.PermissionsChecker;
 import com.zff.xpanel.parser.R;
 import com.zff.xpanel.parser.util.Constant;
 import com.zff.xpanel.parser.util.Properties;
-import com.zff.xpanel.parser.util.Properties.LayoutMode;
-import com.zff.xpanel.parser.view.Color;
+import com.zff.xpanel.parser.view.MyColor;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AbsoluteLayout;
@@ -55,7 +46,7 @@ public class MainActivity extends Activity {
         
         TextView tv = (TextView)findViewById(R.id.textView_1);
         tv.setOnClickListener(myOnClickListener);
-        tv.setBackgroundColor(Color.YELLOW_VALUE);
+        tv.setBackgroundColor(MyColor.YELLOW_VALUE);
         
         findViewById(R.id.textView_2).setOnClickListener(myOnClickListener);
         findViewById(R.id.textView_3).setOnClickListener(myOnClickListener);

@@ -290,7 +290,7 @@ public class ThemeXmlParser {
 	}
 	private boolean isColor(String text){
 		//return "color".equals(text);
-		return text.contains("color");
+		return "color".equalsIgnoreCase(text.trim());
 	}
 	private boolean isFontSize(String text){
 		//return "font-size".equals(text);
