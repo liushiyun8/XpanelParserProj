@@ -133,10 +133,10 @@ public class InflaterPage {
 			return absLayout;
 		}
 		
-		int layoutX = (int) (page.getX() * properties.getLayoutWithRatio()); 
+		int layoutX = (int) (page.getX() * properties.getLayoutWithRatio());
 		int layoutY = (int) (page.getY() * properties.getLayoutHightRatio());
-		int layoutW = (int) (page.getW() * properties.getLayoutWithRatio());
-		int layoutH = (int) (page.getH() * properties.getLayoutHightRatio());
+		int layoutW = (int) (properties.getDesignerWidth() * properties.getLayoutWithRatio());
+		int layoutH = (int) (properties.getDesignerHight() * properties.getLayoutHightRatio());
 		AbsoluteLayout.LayoutParams ablParams = new AbsoluteLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, layoutX, layoutY);
 		absLayout.setLayoutParams(ablParams);
 		//absLayout.setBackgroundColor(0x9ac865a9);
@@ -451,6 +451,8 @@ public class InflaterPage {
 		//ColorStateList csl = new ColorStateList(states, colors)
 		button.setOnClickListener(mBtnOnClickListener);
 		button.setOnTouchListener(mBtnOnTouchListener);
+//		button=new Button(context);
+//		button.setText("hello");
 		return button;
 	}
 	

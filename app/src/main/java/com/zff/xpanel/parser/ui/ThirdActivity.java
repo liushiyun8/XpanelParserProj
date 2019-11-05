@@ -3,8 +3,6 @@ package com.zff.xpanel.parser.ui;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import com.zff.xpanel.parser.R;
 import com.zff.xpanel.parser.io.ConnectManager;
@@ -29,6 +27,7 @@ import com.zff.xpanel.parser.cache.Pages;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,6 +36,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -81,6 +81,7 @@ public class ThirdActivity extends Activity{
 	private MyBtnOnTouchListener myBtnOnTouchListener;
 	private MySeekbarChangeListener mySeekbarChangeListener;
 	private MyOnEditorActionListener myOnEditorActionListener;
+	public static final String pageName="pagename";
 
 
 	private enum EventType{
@@ -124,7 +125,8 @@ public class ThirdActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate-->");
 		setContentView(R.layout.activity_third);
-		
+		String mypageName = getIntent().getStringExtra(pageName);
+
 		primptTv = (TextView)findViewById(R.id.textView);
 		mStateImg = findViewById(R.id.state_img);
 		mStateTv = (TextView)findViewById(R.id.state_tv);
@@ -141,14 +143,20 @@ public class ThirdActivity extends Activity{
 		inflaterPage.setBtnTouchListener(myBtnOnTouchListener);
 		inflaterPage.setSeekbarChangeListener(mySeekbarChangeListener);
 		inflaterPage.setOnEditorActionListener(myOnEditorActionListener);
-		
-		String launcherPage = Properties.getInstant().getLauncherPageName();
+
+		String launcherPage;
+		Log.e(TAG,"mypageName:"+mypageName);
+		if(!TextUtils.isEmpty(mypageName)){
+			launcherPage=mypageName;
+		}else {
+			launcherPage = Properties.getInstant().getLauncherPageName();
+		}
+		Log.e(TAG,"launcherPage:"+launcherPage);
 		loadData(launcherPage);
 
 		obtainSocket();
 		//初始化抽屉的数据
 		setSlidingDrawerData();
-
 	}
 
 	@Override
@@ -216,7 +224,7 @@ public class ThirdActivity extends Activity{
 					PageXmlParser xmlPsr = new PageXmlParser();
 					page = xmlPsr.parse(Constant.PAGES_DIR, pageName);
 				}
-				return pages.getAllPageMap().entrySet().iterator().next().getValue();
+				return page;
 			}
 
 			@Override

@@ -25,7 +25,7 @@ public class PropertiesXmlParser {
 		File file = new File(dirPath, fileName);
 		if(file.exists()){
 			String name = file.getName();
-			Log.i(TAG, "file is not exists. name-->"+name);
+			Log.i(TAG, "file is exists. name-->"+name);
 		}else{
 			return properties;
 		}
@@ -72,8 +72,8 @@ public class PropertiesXmlParser {
 					
 				}
 				try{
-					//xmlPullParser.next();
-					xmlPullParser.nextTag();
+					xmlPullParser.next();
+//					xmlPullParser.nextTag();
 				}catch(XmlPullParserException e){
 					e.printStackTrace();
 				}

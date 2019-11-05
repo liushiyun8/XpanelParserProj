@@ -8,8 +8,12 @@ import java.io.IOException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.Application;
+import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.Xml;
+import android.view.Gravity;
+import android.widget.TextView;
 
 import com.zff.xpanel.parser.view.Theme;
 import com.zff.xpanel.parser.cache.Themes;
@@ -123,8 +127,9 @@ public class ThemeXmlParser {
 				}
 				theme.setName(themeName);
 				theme.setType(themType);
-				try{					
-					status = Integer.valueOf(nameAndStatus[1]);
+				try{
+					if(nameAndStatus[1]!=null)
+					  status = Integer.valueOf(nameAndStatus[1]);
 				}catch(NumberFormatException e){
 					e.printStackTrace();
 				}
@@ -185,7 +190,7 @@ public class ThemeXmlParser {
 				e.printStackTrace();
 			}
 		}else if(length == 1){
-			result[0] = strArray[0].substring(1, strArray[0].length());
+			result[0] = strArray[0].substring(1);
 		}
 		return result;
 	}
@@ -212,12 +217,69 @@ public class ThemeXmlParser {
 					parseColor(vaule, itemArray[1]);					
 				}else if(isFontSize(itemArray[0])){
 					parseFontSize(vaule, itemArray[1]);
+				}else if(isFontWeight(itemArray[0])){
+					parseFontWeight(vaule,itemArray[1]);
+				}else if(isTextAlign(itemArray[0])){
+					parseTextAlign(vaule,itemArray[1]);
+				}else if(isverticalAlign(itemArray[0])){
+					parseVerticalAlign(vaule,itemArray[1]);
 				}
 			}
 		}
 		return vaule;
 	}
-	
+
+	private void parseVerticalAlign(Theme.Value vaule, String s) {
+		switch (s.trim()){
+			case "middle":
+				vaule.vertical_align=Gravity.CENTER_VERTICAL;
+				break;
+			case "top":
+				vaule.vertical_align=Gravity.TOP;
+				break;
+			case "bottom":
+				vaule.vertical_align=Gravity.BOTTOM;
+				break;
+		}
+	}
+
+	private boolean isverticalAlign(String s) {
+		return s.contains("vertical-align");
+	}
+
+	private void parseTextAlign(Theme.Value vaule, String s) {
+		switch (s.trim()){
+			case "center":
+				vaule.text_align= Gravity.CENTER_HORIZONTAL;
+				break;
+			case "left":
+				vaule.text_align= Gravity.START;
+				break;
+			case "right":
+				vaule.text_align=Gravity.END;
+				break;
+		}
+	}
+
+	private boolean isTextAlign(String s) {
+		return s.contains("text-align");
+	}
+
+	private void parseFontWeight(Theme.Value vaule, String s) {
+		switch (s.trim()){
+			case "bold":
+				vaule.fontweight= Typeface.DEFAULT_BOLD;
+				break;
+			case "normal":
+				vaule.fontweight= Typeface.DEFAULT;
+				break;
+		}
+	}
+
+	private boolean isFontWeight(String text) {
+		return text.contains("font-weight");
+	}
+
 	private boolean isPadding(String text){
 		//return "padding".equals(text);
 		return text.contains("padding");

@@ -60,7 +60,7 @@ public class PageXmlParser {
         File file = new File(path, fileName);
         if (file.exists()) {
             String name = file.getName();
-            Log.i(TAG, "file is not exists. name-->" + name);
+            Log.i(TAG, "file is  exists. name-->" + name);
         } else {
             return page;
         }
@@ -77,9 +77,9 @@ public class PageXmlParser {
                         if (isSkip(name)) {
                             break;
                         } else if (isPage(name)) {
-                            String pageName = xmlPullParser.getAttributeValue(null, "name");
-                            page = new Subpage();
-                            page.setName(pageName);
+//                            String pageName = xmlPullParser.getAttributeValue(null, "name");
+                            page = parseSubpage(xmlPullParser);
+//                            page.setName(pageName);
                             Pages.getInstant().addPage(page);
                         } else if (isSubpage(name)) {
                             //是解析与page同级的subpage标签还是解析page中的子view subpage标签
@@ -90,21 +90,23 @@ public class PageXmlParser {
                                 sbp = getSubpage(sbp.getName(), sbp.getjId(), sbp.getX(), sbp.getY());
                                 page.addViewArgs(sbp);
                             }
-                        } else if (isTextView(name)) {
-                            page.addViewArgs(parseTextViewArgs(xmlPullParser));
-                        } else if (isImageView(name)) {
-                            page.addViewArgs(parseImageViewArgs(xmlPullParser));
                         }
+//                        else if (isTextView(name)) {
+//                            page.addViewArgs(parseTextViewArgs(xmlPullParser));
+//                        } else if (isImageView(name)) {
+//                            page.addViewArgs(parseImageViewArgs(xmlPullParser));
+//                        }else if(isButton(name)){
+//
+//                        }
                         break;
                     case XmlPullParser.END_TAG:
                         if (isPage(name)) {
-                            Pages.getInstant().addPage(page);
+                            return page;
                         }
-                        break;
                 }
                 try {
-                    //xmlPullParser.next();
-                    xmlPullParser.nextTag();
+                    xmlPullParser.next();
+//                    xmlPullParser.nextTag();
                 } catch (XmlPullParserException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -309,7 +311,7 @@ public class PageXmlParser {
             }
             //next
             try {
-                type = xmlPullParser.nextTag();
+                type = xmlPullParser.next();
             } catch (XmlPullParserException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -585,7 +587,7 @@ public class PageXmlParser {
             }
             //next
             try {
-                type = xmlPullParser.nextTag();
+                type = xmlPullParser.next();
             } catch (XmlPullParserException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -676,7 +678,7 @@ public class PageXmlParser {
             }
             //next
             try {
-                type = xmlPullParser.nextTag();
+                type = xmlPullParser.next();
             } catch (XmlPullParserException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -835,7 +837,7 @@ public class PageXmlParser {
             }
             //next
             try {
-                type = xmlPullParser.nextTag();
+                type = xmlPullParser.next();
             } catch (XmlPullParserException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -895,7 +897,7 @@ public class PageXmlParser {
             }
             //next
             try {
-                type = xmlPullParser.nextTag();
+                type = xmlPullParser.next();
             } catch (XmlPullParserException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

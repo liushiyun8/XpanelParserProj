@@ -1,5 +1,7 @@
 package com.zff.xpanel.parser.view;
 
+import android.graphics.Typeface;
+
 public class Theme {
 
 	public static final String TYPE_TEXT = "text";
@@ -93,5 +95,8 @@ public class Theme {
 		public String backgoundImg;
 		public String fontColor;
 		public int fontSize;
+		public Typeface fontweight;
+		public int text_align;
+		public int vertical_align;
 	}
 }
