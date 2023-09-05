@@ -40,11 +40,8 @@ public class GuiFileResolve {
 					}
 					bw = new BufferedWriter(new FileWriter(new File(dir, Constant.PROPERTIES_FILE_NAME)));
 				}else if(isPropertiesEnd(lineContent)){
-					if(bw != null){
-						bw.flush();
-						bw.close();
-						bw = null;
-					}
+					closeBw(bw, lineContent);
+					bw=null;
 				}else if(isPageStart(lineContent)){
 					File dir = new File(Constant.PAGES_DIR);
 					if(!dir.exists()){
@@ -58,11 +55,8 @@ public class GuiFileResolve {
 					isResolvingPage = true;
 				}else if(isPageEnd(lineContent)){
 					isResolvingPage = false;
-					if(bw != null){
-						bw.flush();
-						bw.close();
-						bw = null;
-					}
+					closeBw(bw, lineContent);
+					bw=null;
 				}else if(isSubPageStart(lineContent)){
 					if(!isResolvingPage){						
 						File dir = new File(Constant.SUBPAGES_DIR);
@@ -73,9 +67,8 @@ public class GuiFileResolve {
 					}
 				}else if(isSubPageEnd(lineContent)){
 					if(!isResolvingPage && bw != null){
-						bw.flush();
-						bw.close();
-						bw = null;
+						closeBw(bw, lineContent);
+						bw=null;
 					}
 				}else if(isThemesStart(lineContent)){
 					File dir = new File(Constant.THEMES_DIR);
@@ -84,14 +77,39 @@ public class GuiFileResolve {
 					}
 					bw = new BufferedWriter(new FileWriter(new File(dir, Constant.THEMES_FILE_NAME)));
 				}else if(isThemesEnd(lineContent)){
-					if(bw != null){
-						bw.flush();
-						bw.close();
-						bw = null;
+					closeBw(bw, lineContent);
+					bw=null;
+				}else if(isSystemStart(lineContent)){
+					File dir = new File(Constant.SYSTEMS_DIR);
+					if(!dir.exists()){
+						dir.mkdir();
 					}
+					bw = new BufferedWriter(new FileWriter(new File(dir, Constant.SYSTEMS_FILE_NAME)));
+				}else if(isSystemEnd(lineContent)){
+					closeBw(bw, lineContent);
+					bw=null;
+				}else if(isMacrosStart(lineContent)){
+					File dir = new File(Constant.MICROS_DIR);
+					if(!dir.exists()){
+						dir.mkdir();
+					}
+					bw = new BufferedWriter(new FileWriter(new File(dir, Constant.MICROS_FILE_NAME)));
+				}else if(isMacrosEnd(lineContent)){
+					closeBw(bw, lineContent);
+					bw=null;
+				}else if(isScriptStart(lineContent)){
+					File dir = new File(Constant.SCRIPT_DIR);
+					if(!dir.exists()){
+						dir.mkdir();
+					}
+					bw = new BufferedWriter(new FileWriter(new File(dir, Constant.SCRIPT_FILE_NAME)));
+				}else if(isScriptEnd(lineContent)){
+					closeBw(bw, lineContent);
+					bw=null;
 				}
-				if(bw != null){				
+				if(bw != null){
 					bw.write(lineContent, 0, lineContent.length());
+					bw.newLine();
 				}
 			}
 		} catch (IOException e) {
@@ -125,7 +143,39 @@ public class GuiFileResolve {
 		}
 		return isSuccess;
 	}
-	
+
+	private boolean isScriptStart(String content) {
+		return content.contains("<scripts");
+	}
+
+	private boolean isScriptEnd(String content) {
+		return content.contains("</scripts>");
+	}
+
+	private void closeBw(BufferedWriter bw, String lineContent) throws IOException {
+		if(bw != null){
+			bw.write(lineContent, 0, lineContent.length());
+			bw.flush();
+			bw.close();
+		}
+	}
+
+	private boolean isMacrosEnd(String content) {
+		return content.contains("</macros>");
+	}
+
+	private boolean isMacrosStart(String content) {
+		return content.contains("<macros");
+	}
+
+	private boolean isSystemEnd(String content) {
+		return content.contains("</systems>");
+	}
+
+	private boolean isSystemStart(String content) {
+		return content.contains("<systems");
+	}
+
 	private boolean isPropertiesStart(String content){
 		return content.contains("<properties");
 	}

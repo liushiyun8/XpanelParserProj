@@ -11,5 +11,10 @@ public interface HandlerMsgConstant {
 	
 	int READ_MSG_WHAT = 0x10;
 	int READ_STOP_MSG_WHAT = 0x11;
-	
+
+	int DOWNLAOD_MSG=0x2000;
+	int DOWNLAOD_RES=0x2001;
+
+	int REGISTER_RES=0x2002;
+
 }

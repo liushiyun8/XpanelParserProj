@@ -23,10 +23,10 @@ package org.videolan.libvlc;
 import android.support.annotation.Nullable;
 
 @SuppressWarnings("unused, JniMissingFunction")
-public class MediaDiscoverer extends VLCObject<MediaDiscoverer.Event> {
+public class MediaDiscoverer extends org.videolan.libvlc.VLCObject<MediaDiscoverer.Event> {
     private final static String TAG = "LibVLC/MediaDiscoverer";
 
-    public static class Event extends VLCEvent {
+    public static class Event extends org.videolan.libvlc.VLCEvent {
 
         public static final int Started = 0x500;
         public static final int Ended   = 0x501;
@@ -65,9 +65,9 @@ public class MediaDiscoverer extends VLCObject<MediaDiscoverer.Event> {
         return new Description(name, longName, category);
     }
 
-    public interface EventListener extends VLCEvent.Listener<Event> {}
+    public interface EventListener extends org.videolan.libvlc.VLCEvent.Listener<Event> {}
 
-    private MediaList mMediaList = null;
+    private org.videolan.libvlc.MediaList mMediaList = null;
 
     /**
      * Create a MediaDiscover.
@@ -75,7 +75,7 @@ public class MediaDiscoverer extends VLCObject<MediaDiscoverer.Event> {
      * @param libVLC a valid LibVLC
      * @param name Name of the vlc service discovery ("dsm", "upnp", "bonjour"...).
      */
-    public MediaDiscoverer(LibVLC libVLC, String name) {
+    public MediaDiscoverer(org.videolan.libvlc.LibVLC libVLC, String name) {
         super(libVLC);
         nativeNew(libVLC, name);
     }
@@ -121,14 +121,14 @@ public class MediaDiscoverer extends VLCObject<MediaDiscoverer.Event> {
      *
      * @return MediaList. This MediaList should be released with {@link #release()}.
      */
-    public MediaList getMediaList() {
+    public org.videolan.libvlc.MediaList getMediaList() {
         synchronized (this) {
             if (mMediaList != null) {
                 mMediaList.retain();
                 return mMediaList;
             }
         }
-        final MediaList mediaList = new MediaList(this);
+        final org.videolan.libvlc.MediaList mediaList = new MediaList(this);
         synchronized (this) {
             mMediaList = mediaList;
             mMediaList.retain();
@@ -148,12 +148,12 @@ public class MediaDiscoverer extends VLCObject<MediaDiscoverer.Event> {
      * @param category see {@link Description.Category}
      */
     @Nullable
-    public static Description[] list(LibVLC libVLC, int category) {
+    public static Description[] list(org.videolan.libvlc.LibVLC libVLC, int category) {
         return nativeList(libVLC, category);
     }
 
     /* JNI */
-    private native void nativeNew(LibVLC libVLC, String name);
+    private native void nativeNew(org.videolan.libvlc.LibVLC libVLC, String name);
     private native void nativeRelease();
     private native boolean nativeStart();
     private native void nativeStop();

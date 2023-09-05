@@ -95,8 +95,13 @@ public class Theme {
 		public String backgoundImg;
 		public String fontColor;
 		public int fontSize;
-		public Typeface fontweight;
+		public int fontweight;
 		public int text_align;
 		public int vertical_align;
+		public String backgroundColor;
+		public String borderColor;
+		public String font_family;
+		public int borderWidth;
+		public boolean underline;
 	}
 }

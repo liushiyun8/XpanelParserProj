@@ -2,49 +2,83 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.zff.xpanel.parser">
-    
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
         android:name=".ui.MyApp"
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:largeHeap="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:targetApi="m">
+        <activity android:name=".ui.TestActivity">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
+        <receiver
+            android:name=".servers.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".servers.SocketService"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
-            android:name="com.zff.xpanel.parser.ui.WelcomeActivity"
+            android:name=".ui.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="landscape"
+            android:screenOrientation="nosensor"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
-            >
-            <intent-filter>
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        
-        <!-- android:theme="@style/FullscreenTheme"  --> 
-        <!--  <activity android:name="com.zff.xpanel.parser.ui.MainActivity"></activity>-->
-        <activity android:name=".ui.PermissionsActivity"
-            android:theme="@style/Theme.AppCompat"/>
-        <activity android:name="com.zff.xpanel.parser.FullscreenActivity"/>
-        <activity android:name="com.zff.xpanel.parser.ui.SecondActivity"/>
-        <activity android:name="com.zff.xpanel.parser.ui.ConnectActivity"/>
-        <activity android:name=".ui.SettingActivity"
-            android:screenOrientation="landscape"/>
-        <activity android:name="com.zff.xpanel.parser.ui.ThirdActivity"
+        </activity> <!-- android:theme="@style/FullscreenTheme" -->
+        <!-- <activity android:name="com.zff.xpanel.parser.ui.MainActivity"></activity> -->
+        <activity
+            android:name=".ui.PermissionsActivity"
+            android:theme="@style/Theme.AppCompat" />
+        <activity android:name=".FullscreenActivity" />
+        <activity android:name=".ui.SecondActivity" />
+        <activity
+            android:name=".ui.ConnectActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="nosensor"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
-            android:screenOrientation="landscape"/>
-        
-        <service android:name="com.zff.ftp.ZffFtpServer"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.SettingActivity"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".ui.ThirdActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="nosensor"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <service android:name="com.zff.ftp.ZffFtpServer" />
     </application>
 
 </manifest>

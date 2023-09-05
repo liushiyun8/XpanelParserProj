@@ -39,8 +39,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 		ini();
         
-        Properties.ini(getApplicationContext());
-        
 
         MyOnClickListener myOnClickListener = new MyOnClickListener();
         

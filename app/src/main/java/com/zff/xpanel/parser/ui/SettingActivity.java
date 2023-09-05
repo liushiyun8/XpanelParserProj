@@ -3,6 +3,7 @@ package com.zff.xpanel.parser.ui;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -20,6 +21,8 @@ import java.util.Map;
 public class SettingActivity extends BaseActivity {
 
     private Spinner mSpinner;
+    private Spinner mSpinner1;
+    private String moShies[] = {"横屏","竖屏"};
 
     @Override
     protected int getContentViewLayoutId() {
@@ -30,18 +33,7 @@ public class SettingActivity extends BaseActivity {
     protected void iniView() {
 
         mSpinner = findViewById(R.id.spinner);
-        findViewById(R.id.textView_1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        findViewById(R.id.textView_2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        mSpinner1 = findViewById(R.id.spinner1);
     }
 
     @Override
@@ -66,6 +58,24 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Properties.getInstant().saveConfigLayoutMode(modes[position]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        SpinnerAdapter spinnerAdapter1 = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,moShies);
+        mSpinner1.setAdapter(spinnerAdapter1);
+        int moshe = Properties.getInstant().getMoshe();
+        if(moshe<2){
+            mSpinner1.setSelection(moshe);
+        }
+        mSpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Properties.getInstant().saveMoshe(position);
             }
 
             @Override

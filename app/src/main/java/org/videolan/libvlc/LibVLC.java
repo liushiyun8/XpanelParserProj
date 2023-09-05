@@ -34,7 +34,7 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
     private static final String TAG = "VLC/LibVLC";
     final Context mAppContext;
 
-    public static class Event extends VLCEvent {
+    public static class Event extends org.videolan.libvlc.VLCEvent {
         protected Event(int type) {
             super(type);
         }
@@ -65,7 +65,7 @@ public class LibVLC extends VLCObject<LibVLC.Event> {
         // set aout/vout options if they are not set
         if (setAout || setChroma) {
             if (setAout) {
-                final HWDecoderUtil.AudioOutput hwAout = HWDecoderUtil.getAudioOutputFromDevice();
+                final org.videolan.libvlc.util.HWDecoderUtil.AudioOutput hwAout = org.videolan.libvlc.util.HWDecoderUtil.getAudioOutputFromDevice();
                 if (hwAout == HWDecoderUtil.AudioOutput.OPENSLES)
                     options.add("--aout=opensles");
                 else

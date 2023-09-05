@@ -72,6 +72,8 @@ public class ConnectManager {
 //			connThread.disconnect();
 //			connThread.setConnectCallback(null);
 		}
+		connThread.setServerIpAddress(serverIp);
+		connThread.setServerPort(serverPort);
 		mExecutorService.execute(connThread);
 	}
 	public void disconnect(){
@@ -101,6 +103,7 @@ public class ConnectManager {
 		if(mUiHandler != null){
 			Message msg = mUiHandler.obtainMessage(msgWhat, rdw);
 			msg.sendToTarget();
+
 		}
         Log.i(TAG, "sendMsg-->msgWhat="+msgWhat+", data.num="+rdw.getJoinNum());
 	}

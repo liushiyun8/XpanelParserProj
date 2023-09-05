@@ -12,8 +12,9 @@ package com.zff.xpanel.parser.view;
  */
 public class SliderArgs extends GaugeArgs{
 
+	private Indicator activeindicator;
 	private Indicator indicator;
-	
+
 	public SliderArgs(){
 		setType(Type.SEEK_BAR);
 	}
@@ -28,7 +29,13 @@ public class SliderArgs extends GaugeArgs{
 		this.indicator = indicator;
 	}
 
+	public Indicator getActiveindicator() {
+		return activeindicator;
+	}
 
+	public void setActiveindicator(Indicator activeindicator) {
+		this.activeindicator = activeindicator;
+	}
 
 	public static class Indicator{
 		public String imgPath;

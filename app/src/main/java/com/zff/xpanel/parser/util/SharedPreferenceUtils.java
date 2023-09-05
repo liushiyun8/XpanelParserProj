@@ -38,6 +38,90 @@ public class SharedPreferenceUtils {
         editor.putInt("tcp_port", port);
         editor.apply();
     }
+    //保存ip信息到sp
+    public void saveHttpToSp(String site){
+        if(sp == null){
+            iniSp();
+        }
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("http", site);
+        editor.apply();
+    }
+
+    //保信息到sp
+    public void saveHttpEnableToSp(boolean ok){
+        if(sp == null){
+            iniSp();
+        }
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("Httpenable",ok);
+        editor.apply();
+    }
+
+    public boolean getHttpEnableToSp(){
+        if(sp == null){
+            iniSp();
+        }
+       return sp.getBoolean("Httpenable",false);
+    }
+    //保信息到sp
+    public void saveAutoToSp(boolean ok){
+        if(sp == null){
+            iniSp();
+        }
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("auto",ok);
+        editor.apply();
+    }
+
+    public boolean getAutofromSp(){
+        if(sp == null){
+            iniSp();
+        }
+       return sp.getBoolean("auto",false);
+    }
+
+    //保信息到sp
+    public void saveLogToSp(boolean ok){
+        if(sp == null){
+            iniSp();
+        }
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("islog",ok);
+        editor.apply();
+    }
+
+    public boolean getLogfromSp(){
+        if(sp == null){
+            iniSp();
+        }
+       return sp.getBoolean("islog",true);
+    }
+
+    //保信息到sp
+    public void saveHeartToSp(boolean hasHeart){
+        if(sp == null){
+            iniSp();
+        }
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("hasHeart",hasHeart);
+        editor.apply();
+    }
+
+    public boolean getHeartfromSp(){
+        if(sp == null){
+            iniSp();
+        }
+       return sp.getBoolean("hasHeart",false);
+    }
+
+
+    public String getSp(String site){
+        if(sp == null){
+            iniSp();
+        }
+        return sp.getString(site,"http://192.168.0.100:8019");
+    }
 
 
     public static class SPVo{

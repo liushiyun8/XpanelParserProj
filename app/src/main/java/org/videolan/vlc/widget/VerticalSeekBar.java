@@ -20,12 +20,14 @@
 
 package org.videolan.vlc.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.SeekBar;
 
+@SuppressLint("AppCompatCustomView")
 public class VerticalSeekBar extends SeekBar {
 
     private boolean mIsMovingThumb = false;
@@ -97,20 +99,38 @@ public class VerticalSeekBar extends SeekBar {
                     getParent().requestDisallowInterceptTouchEvent(true);
                     mIsMovingThumb = true;
                     handled = true;
+                    setPressed(true);
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (mIsMovingThumb) {
                     final int max = getMax();
-                    setProgress(max - (int) (max* event.getY() / getHeight()));
+                    int progress=max - (int) (max* event.getY() / getHeight());
+                    if(progress>max){
+                        progress=max;
+                    }
+                    if(progress<0){
+                        progress=0;
+                    }
+                    setProgress(progress);
                     handled = true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 getParent().requestDisallowInterceptTouchEvent(false);
+                final int max = getMax();
+                int progress=max - (int) (max* event.getY() / getHeight());
+                if(progress>max){
+                    progress=max;
+                }
+                if(progress<0){
+                    progress=0;
+                }
+                setProgress(progress);
                 mIsMovingThumb = false;
                 handled = true;
+                setPressed(false);
                 break;
         }
         return handled;

@@ -19,6 +19,14 @@ public class ConnectThread implements Runnable{
 
 	private ConnectCallback mConnectCallback;
 
+	public void setServerIpAddress(String serverIpAddress) {
+		this.serverIpAddress = serverIpAddress;
+	}
+
+	public void setServerPort(int serverPort) {
+		this.serverPort = serverPort;
+	}
+
 	public interface ConnectCallback{
 		void onConnected(Socket socket);
 		void onDisconnected();

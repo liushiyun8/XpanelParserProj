@@ -141,7 +141,7 @@ public class HWDecoderUtil {
          * Try OMX or MediaCodec after HoneyComb depending on device properties.
          * Otherwise, use software decoder by default.
          */
-        if (AndroidUtil.isJellyBeanMR2OrLater)
+        if (org.videolan.libvlc.util.AndroidUtil.isJellyBeanMR2OrLater)
             return Decoder.ALL;
         else if (AndroidUtil.isHoneycombOrLater) {
             for (DecoderBySOC decBySOC : sDecoderBySOCList) {

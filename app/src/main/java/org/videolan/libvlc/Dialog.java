@@ -28,7 +28,7 @@ import android.support.annotation.MainThread;
 public abstract class Dialog {
 
     /**
-     * Dialog Callback, see {@link Dialog#setCallbacks(LibVLC, Callbacks)}
+     * Dialog Callback, see {@link Dialog#setCallbacks(org.videolan.libvlc.LibVLC, Callbacks)}
      */
     public interface Callbacks {
         /**
@@ -168,7 +168,7 @@ public abstract class Dialog {
      * @param callbacks dialog callbacks or null to unregister
      */
     @MainThread
-    public static void setCallbacks(LibVLC libVLC, Callbacks callbacks) {
+    public static void setCallbacks(org.videolan.libvlc.LibVLC libVLC, Callbacks callbacks) {
         if (callbacks != null && sHandler == null)
             sHandler = new Handler(Looper.getMainLooper());
         sCallbacks = callbacks;

@@ -32,6 +32,7 @@ public class FileTools {
     public static File lookupFile(File dir, String fileSuffix){
         File[] files = dir.listFiles();
         File file = null;
+        if(files!=null)
         for(int i=0; i<files.length; i++){
             if(files[i].getName().endsWith(fileSuffix)){
                 file = files[i];

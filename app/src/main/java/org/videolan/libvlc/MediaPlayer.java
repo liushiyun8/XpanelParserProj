@@ -42,9 +42,9 @@ import org.videolan.libvlc.util.VLCUtil;
 import java.io.File;
 
 @SuppressWarnings("unused, JniMissingFunction")
-public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
+public class MediaPlayer extends org.videolan.libvlc.VLCObject<MediaPlayer.Event> {
 
-    public static class Event extends VLCEvent {
+    public static class Event extends org.videolan.libvlc.VLCEvent {
         public static final int MediaChanged        = 0x100;
         //public static final int NothingSpecial      = 0x101;
         public static final int Opening             = 0x102;
@@ -110,7 +110,7 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
         }
     }
 
-    public interface EventListener extends VLCEvent.Listener<Event> {}
+    public interface EventListener extends org.videolan.libvlc.VLCEvent.Listener<Event> {}
 
     public static class Position {
         public static final int Disable = -1;
@@ -354,7 +354,7 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
         private native boolean nativeSetAmp(int index, float amp);
     }
 
-    private Media mMedia = null;
+    private org.videolan.libvlc.Media mMedia = null;
     private boolean mPlaying = false;
     private boolean mPlayRequested = false;
     private boolean mAudioDeviceFromUser = false;
@@ -366,9 +366,9 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
     private boolean mAudioPlugRegistered = false;
     private String mAudioPlugOutputDevice = "stereo";
 
-    private final AWindow mWindow = new AWindow(new AWindow.SurfaceCallback() {
+    private final org.videolan.libvlc.AWindow mWindow = new org.videolan.libvlc.AWindow(new org.videolan.libvlc.AWindow.SurfaceCallback() {
         @Override
-        public void onSurfacesCreated(AWindow vout) {
+        public void onSurfacesCreated(org.videolan.libvlc.AWindow vout) {
             boolean play = false;
             boolean enableVideo = false;
             synchronized (MediaPlayer.this) {
@@ -384,7 +384,7 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
         }
 
         @Override
-        public void onSurfacesDestroyed(AWindow vout) {
+        public void onSurfacesDestroyed(org.videolan.libvlc.AWindow vout) {
             boolean disableVideo = false;
             synchronized (MediaPlayer.this) {
                 if (mVoutCount > 0)
@@ -528,7 +528,7 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
      *
      * @param libVLC a valid libVLC
      */
-    public MediaPlayer(LibVLC libVLC) {
+    public MediaPlayer(org.videolan.libvlc.LibVLC libVLC) {
         super(libVLC);
         nativeNewFromLibVlc(libVLC, mWindow);
     }
@@ -538,7 +538,7 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
      *
      * @param media a valid Media object
      */
-    public MediaPlayer(Media media) {
+    public MediaPlayer(org.videolan.libvlc.Media media) {
         super(media);
         if (media == null || media.isReleased())
             throw new IllegalArgumentException("Media is null or released");
@@ -559,7 +559,7 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
      *
      * @param media a valid Media object
      */
-    public void setMedia(Media media) {
+    public void setMedia(org.videolan.libvlc.Media media) {
         if (media != null) {
             if (media.isReleased())
                 throw new IllegalArgumentException("Media is released");
@@ -579,7 +579,7 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
     /**
      * Get the Media used by this MediaPlayer. This Media should be released with {@link #release()}.
      */
-    public synchronized Media getMedia() {
+    public synchronized org.videolan.libvlc.Media getMedia() {
         if (mMedia != null)
             mMedia.retain();
         return mMedia;
@@ -830,14 +830,14 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
     /**
      * Get the current video track
      */
-    public Media.VideoTrack getCurrentVideoTrack() {
+    public org.videolan.libvlc.Media.VideoTrack getCurrentVideoTrack() {
         if (getVideoTrack() == -1)
             return null;
         final int trackCount = mMedia.getTrackCount();
         for (int i = 0; i < trackCount; ++i) {
-            final Media.Track  track = mMedia.getTrack(i);
-            if (track.type == Media.Track.Type.Video)
-                return (Media.VideoTrack) track;
+            final org.videolan.libvlc.Media.Track track = mMedia.getTrack(i);
+            if (track.type == org.videolan.libvlc.Media.Track.Type.Video)
+                return (org.videolan.libvlc.Media.VideoTrack) track;
         }
         return null;
     }
@@ -972,7 +972,7 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
     /**
      * Add a slave (or subtitle) to the current media player.
      *
-     * @param type see {@link Media.Slave.Type}
+     * @param type see {@link org.videolan.libvlc.Media.Slave.Type}
      * @param uri a valid RFC 2396 Uri
      * @return true on success.
      */
@@ -983,7 +983,7 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
     /**
      * Add a slave (or subtitle) to the current media player.
      *
-     * @param type see {@link Media.Slave.Type}
+     * @param type see {@link org.videolan.libvlc.Media.Slave.Type}
      * @param path a local path
      * @return true on success.
      */
@@ -1121,8 +1121,8 @@ public class MediaPlayer extends VLCObject<MediaPlayer.Event> {
     }
 
     /* JNI */
-    private native void nativeNewFromLibVlc(LibVLC libVLC, AWindow window);
-    private native void nativeNewFromMedia(Media media, AWindow window);
+    private native void nativeNewFromLibVlc(LibVLC libVLC, org.videolan.libvlc.AWindow window);
+    private native void nativeNewFromMedia(org.videolan.libvlc.Media media, AWindow window);
     private native void nativeRelease();
     private native void nativeSetMedia(Media media);
     private native void nativePlay();

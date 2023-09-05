@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("WeakerAccess")
-public class AWindow implements IVLCVout {
+public class AWindow implements org.videolan.libvlc.IVLCVout {
     private static final String TAG = "AWindow";
 
     private static final int ID_VIDEO = 0;
@@ -358,7 +358,7 @@ public class AWindow implements IVLCVout {
                 surfaceHelper.release();
             mSurfaceHelpers[id] = null;
         }
-        for (IVLCVout.Callback cb : mIVLCVoutCallbacks)
+        for (Callback cb : mIVLCVoutCallbacks)
             cb.onSurfacesDestroyed(this);
         if (mSurfaceCallback != null)
             mSurfaceCallback.onSurfacesDestroyed(this);
@@ -384,7 +384,7 @@ public class AWindow implements IVLCVout {
 
         if (videoHelper.isReady() && (subtitlesHelper == null || subtitlesHelper.isReady())) {
             mSurfacesState.set(SURFACE_STATE_READY);
-            for (IVLCVout.Callback cb : mIVLCVoutCallbacks)
+            for (Callback cb : mIVLCVoutCallbacks)
                 cb.onSurfacesCreated(this);
             if (mSurfaceCallback != null)
                 mSurfaceCallback.onSurfacesCreated(this);
@@ -442,18 +442,18 @@ public class AWindow implements IVLCVout {
     private final NativeLock mNativeLock = new NativeLock();
 
     @Override
-    public void addCallback(IVLCVout.Callback callback) {
+    public void addCallback(Callback callback) {
         if (!mIVLCVoutCallbacks.contains(callback))
             mIVLCVoutCallbacks.add(callback);
     }
 
     @Override
-    public void removeCallback(IVLCVout.Callback callback) {
+    public void removeCallback(Callback callback) {
         mIVLCVoutCallbacks.remove(callback);
     }
 
     /**
-     * Callback called from {@link IVLCVout#sendMouseEvent}.
+     * Callback called from {@link org.videolan.libvlc.IVLCVout#sendMouseEvent}.
      *
      * @param nativeHandle handle passed by {@link #registerNative(long)}.
      * @param action see ACTION_* in {@link android.view.MotionEvent}.
@@ -465,7 +465,7 @@ public class AWindow implements IVLCVout {
     private static native void nativeOnMouseEvent(long nativeHandle, int action, int button, int x, int y);
 
     /**
-     * Callback called from {@link IVLCVout#setWindowSize}.
+     * Callback called from {@link org.videolan.libvlc.IVLCVout#setWindowSize}.
      *
      * @param nativeHandle handle passed by {@link #registerNative(long)}.
      * @param width width of the window.
@@ -601,7 +601,7 @@ public class AWindow implements IVLCVout {
 
     /**
      * Set the video Layout.
-     * This call will result of{@link IVLCVout.OnNewVideoLayoutListener#onNewVideoLayout(IVLCVout, int, int, int, int, int, int)}
+     * This call will result of{@link OnNewVideoLayoutListener#onNewVideoLayout(IVLCVout, int, int, int, int, int, int)}
      * being called from the main thread.
      *
      * @param width Frame width

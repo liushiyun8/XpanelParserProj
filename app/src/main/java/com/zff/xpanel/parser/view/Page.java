@@ -11,6 +11,7 @@ public class Page extends ViewArgs{
 
 	
 	private String name;
+	private Trans[] trans;
 	private List<ViewArgs> childList = new ArrayList<ViewArgs>();
 	//private List<Subpage> listSubpage = new ArrayList<Subpage>();
 	private Map<String, LinkageEvent> childLinkEventMap = new HashMap<String, LinkageEvent>();
@@ -36,6 +37,14 @@ public class Page extends ViewArgs{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Trans[] getTrans() {
+		return trans;
+	}
+
+	public void setTrans(Trans[] trans) {
+		this.trans = trans;
 	}
 
 	/**
@@ -116,6 +125,52 @@ public class Page extends ViewArgs{
 	public enum LinkageEvent{
 		VIDEO_PLAY, VIDEO_STOP,
 		WEB_BACK, WEB_FORWARD, WEB_REFRESH, WEB_STOP
+	}
+
+	public static class Trans{
+		String type;
+		String subtype;
+		String ease;
+		int time;
+
+		public Trans(String type, String subtype, String ease, int time) {
+			this.type = type;
+			this.subtype = subtype;
+			this.ease = ease;
+			this.time = time;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public String getSubtype() {
+			return subtype;
+		}
+
+		public void setSubtype(String subtype) {
+			this.subtype = subtype;
+		}
+
+		public String getEase() {
+			return ease;
+		}
+
+		public void setEase(String ease) {
+			this.ease = ease;
+		}
+
+		public int getTime() {
+			return time;
+		}
+
+		public void setTime(int time) {
+			this.time = time;
+		}
 	}
 	
 }

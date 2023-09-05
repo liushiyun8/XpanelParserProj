@@ -1,5 +1,11 @@
 package com.zff.xpanel.parser.io;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 /**
  * 
  * @author zff
@@ -28,6 +34,27 @@ public class ByteConvertUtil {
 			sb.append(String.format("%1$02x ", b[i]));
 		}
 		return sb.toString();
+	}
+
+
+	public static String bytesToUniString(byte[] bBuf){
+//		StringBuffer result = new StringBuffer();
+//        Character ch = 0;
+//        for(int i = 0; i < bBuf.length; i += 2){
+//            if(bBuf[i] == 0){
+//                ch = (char)bBuf[i+1];
+//            }
+//            else {
+//                ch = (char)((bBuf[i] << 8)&0xFF00 | bBuf[i+1]);
+//            }
+//
+////            if(ch == 0){ // 字符串结束符 \0
+////                break;
+////            }
+//            result.append(ch);
+////            new String(bBuf,)
+//        }
+        return new String(bBuf, Charset.forName("unicode"));
 	}
 	
 	

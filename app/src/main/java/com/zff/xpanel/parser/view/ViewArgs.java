@@ -1,5 +1,6 @@
 package com.zff.xpanel.parser.view;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.litesuits.orm.db.annotation.Table;
@@ -26,6 +27,18 @@ public class ViewArgs {
 	private Tag tag;
 	private Type type = Type.TEXT;
 	private String jId;
+
+	public String getS() {
+		return s;
+	}
+
+	public void setS(String s) {
+		this.s = s;
+	}
+
+	private String s;
+	private int sim;
+	private String clickthrough;
 	
 	//主页跳转（如果是none或null都不跳转）
 	private String flip;
@@ -105,13 +118,25 @@ public class ViewArgs {
 		return type;
 	}
 
+	public int getSim() {
+		return sim;
+	}
 
+	public void setSim(int sim) {
+		this.sim = sim;
+	}
 
 	public void setType(Type type) {
 		this.type = type;
 	}
 
+	public String getClickthrough() {
+		return clickthrough;
+	}
 
+	public void setClickthrough(String clickthrough) {
+		this.clickthrough = clickthrough;
+	}
 
 	public Tag getTag() {
 		return tag;
@@ -136,9 +161,20 @@ public class ViewArgs {
 
 	@Table("table_tag")
 	public static class Tag{
-		public int cmd = 0;
+		public String cmd;
+		public String micro;
 		public String jId;
 		public String flip;
+		public String sid;
+		public String clickthrough;
+
+		@Override
+		public boolean equals(@Nullable Object obj) {
+			if(obj instanceof Tag){
+				return this.jId.equals(((Tag) obj).jId);
+			}
+			return super.equals(obj);
+		}
 	}
 	
 	/**

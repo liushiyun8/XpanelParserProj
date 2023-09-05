@@ -26,10 +26,10 @@ import android.os.Looper;
 import java.lang.ref.WeakReference;
 
 @SuppressWarnings("JniMissingFunction")
-abstract class VLCObject<T extends VLCEvent> {
-    private VLCEvent.Listener<T> mEventListener = null;
+abstract class VLCObject<T extends org.videolan.libvlc.VLCEvent> {
+    private org.videolan.libvlc.VLCEvent.Listener<T> mEventListener = null;
     private Handler mHandler = null;
-    final LibVLC mLibVLC;
+    final org.videolan.libvlc.LibVLC mLibVLC;
     private int mNativeRefCount = 1;
 
     protected VLCObject(LibVLC libvlc) {
@@ -95,18 +95,18 @@ abstract class VLCObject<T extends VLCEvent> {
      * Set an event listener.
      * Events are sent via the android main thread.
      *
-     * @param listener see {@link VLCEvent.Listener}
+     * @param listener see {@link org.videolan.libvlc.VLCEvent.Listener}
      */
-    protected synchronized void setEventListener(VLCEvent.Listener<T> listener) {
+    protected synchronized void setEventListener(org.videolan.libvlc.VLCEvent.Listener<T> listener) {
         setEventListener(listener, null);
     }
 
     /**
      * Set an event listener and an executor Handler
-     * @param listener see {@link VLCEvent.Listener}
+     * @param listener see {@link org.videolan.libvlc.VLCEvent.Listener}
      * @param handler Handler in which events are sent. If null, a handler will be created running on the main thread
      */
-    protected synchronized void setEventListener(VLCEvent.Listener<T> listener, Handler handler) {
+    protected synchronized void setEventListener(org.videolan.libvlc.VLCEvent.Listener<T> listener, Handler handler) {
         if (mHandler != null)
             mHandler.removeCallbacksAndMessages(null);
         mEventListener = listener;
@@ -143,10 +143,10 @@ abstract class VLCObject<T extends VLCEvent> {
         final T event = onEventNative(eventType, arg1, arg2, argf1);
 
         class EventRunnable implements Runnable {
-            private final VLCEvent.Listener<T> listener;
+            private final org.videolan.libvlc.VLCEvent.Listener<T> listener;
             private final T event;
 
-            private EventRunnable(VLCEvent.Listener<T> listener, T event) {
+            private EventRunnable(org.videolan.libvlc.VLCEvent.Listener<T> listener, T event) {
                 this.listener = listener;
                 this.event = event;
             }

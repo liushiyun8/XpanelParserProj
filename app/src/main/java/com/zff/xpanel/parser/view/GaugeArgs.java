@@ -17,7 +17,7 @@ public class GaugeArgs extends ViewArgs{
 
 	protected Orientation mOrientation;
 	protected int mMin = 0;
-	protected int mMax = 100;
+	protected int mMax = 255;
 	protected int mCurrentProgress;
 	
 	

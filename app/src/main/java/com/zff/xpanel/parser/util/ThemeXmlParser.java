@@ -15,6 +15,7 @@ import android.util.Xml;
 import android.view.Gravity;
 import android.widget.TextView;
 
+import com.emp.xdcommon.android.log.LogUtils;
 import com.zff.xpanel.parser.view.Theme;
 import com.zff.xpanel.parser.cache.Themes;
 
@@ -62,9 +63,9 @@ public class ThemeXmlParser {
 								Themes.getInstant().addTheme(theme);
 							}
 							//找到需要的theme时就结束
-							if(!TextUtils.isEmpty(newThemeName) && newThemeName.equals(tName)){
-								return theme;
-							}
+//							if(!TextUtils.isEmpty(newThemeName) && newThemeName.equals(tName)){
+//								return theme;
+//							}
 						}
 					}
 				}
@@ -178,6 +179,9 @@ public class ThemeXmlParser {
 	 * @return
 	 */
 	private String[] getNameAndStatus(String attrValue){
+		if(attrValue.contains("usual_number11")){
+			LogUtils.e("TAG","usual_number11");
+		}
 		String[] result = new String[2];
 		//String name = ".newtheme_10[state='0']"; 符号[解析报错故使用state=解析
 		String[] strArray = attrValue.split("state=");
@@ -219,14 +223,84 @@ public class ThemeXmlParser {
 					parseFontSize(vaule, itemArray[1]);
 				}else if(isFontWeight(itemArray[0])){
 					parseFontWeight(vaule,itemArray[1]);
+				}else if(isUnder(itemArray[0])){
+					parseUnder(vaule,itemArray[1]);
+				}else if(isFontStyle(itemArray[0])){
+					parseFontStyle(vaule,itemArray[1]);
 				}else if(isTextAlign(itemArray[0])){
 					parseTextAlign(vaule,itemArray[1]);
 				}else if(isverticalAlign(itemArray[0])){
 					parseVerticalAlign(vaule,itemArray[1]);
+				}else if(isBackgroundColor(itemArray[0])){
+					parseBackgroundColor(vaule,itemArray[1]);
+				}else if(isBorderColor(itemArray[0])){
+					parseBorderColor(vaule,itemArray[1]);
+				}else if(isBorderWidth(itemArray[0])){
+					parseBorderWidth(vaule,itemArray[1]);
+				}else if(isFamily(itemArray[0])){
+					parseFamily(vaule,itemArray[1]);
 				}
 			}
 		}
 		return vaule;
+	}
+
+	private void parseFamily(Theme.Value vaule, String s) {
+		if(!TextUtils.isEmpty(s))
+			vaule.font_family=s.trim();
+	}
+
+	private boolean isFamily(String s) {
+		return s.contains("font-family");
+	}
+
+	private void parseFontStyle(Theme.Value vaule, String s) {
+		if(s.contains("italics"))
+			vaule.fontweight|=Typeface.ITALIC;
+	}
+
+	private boolean isFontStyle(String s) {
+		return s.contains("font-style");
+	}
+
+	private void parseUnder(Theme.Value vaule, String s) {
+		if(s.contains("underline"))
+			vaule.underline=true;
+	}
+
+	private boolean isUnder(String s) {
+		return s.contains("text-decoration");
+	}
+
+	private void parseBackgroundColor(Theme.Value vaule, String s) {
+			vaule.backgroundColor=s.trim();
+	}
+
+	private boolean isBackgroundColor(String s) {
+		return s.contains("background-color");
+	}
+
+	private void parseBorderColor(Theme.Value vaule, String s) {
+			vaule.borderColor= s.trim();
+//			vaule.borderColor=Integer.parseInt(s.trim().substring(1),16)+0xff000000;
+	}
+
+	private boolean isBorderColor(String s) {
+		return s.contains("border-color");
+	}
+
+	private void parseBorderWidth(Theme.Value vaule, String text) {
+		int start = 1;
+		int end = text.indexOf("px");
+		try{
+			vaule.borderWidth = Integer.parseInt(text.substring(start, end));
+		}catch(NumberFormatException e){
+			e.printStackTrace();
+		}
+	}
+
+	private boolean isBorderWidth(String s) {
+		return s.contains("border-width");
 	}
 
 	private void parseVerticalAlign(Theme.Value vaule, String s) {
@@ -266,13 +340,8 @@ public class ThemeXmlParser {
 	}
 
 	private void parseFontWeight(Theme.Value vaule, String s) {
-		switch (s.trim()){
-			case "bold":
-				vaule.fontweight= Typeface.DEFAULT_BOLD;
-				break;
-			case "normal":
-				vaule.fontweight= Typeface.DEFAULT;
-				break;
+		if(s.contains("bold")){
+			vaule.fontweight|= Typeface.BOLD;
 		}
 	}
 

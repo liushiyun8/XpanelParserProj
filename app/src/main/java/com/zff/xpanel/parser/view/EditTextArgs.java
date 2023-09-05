@@ -8,6 +8,7 @@ public class EditTextArgs extends TextViewArgs{
 	private String hint;
 	private boolean isAutoFocus;
 	private boolean isPass;
+	private String f;
 	
 	public EditTextArgs(){
 		setType(Type.EDITTEXT);
@@ -36,7 +37,12 @@ public class EditTextArgs extends TextViewArgs{
 	public void setPass(boolean isPass) {
 		this.isPass = isPass;
 	}
-	
-	
-	
+
+	public String getF() {
+		return f;
+	}
+
+	public void setF(String f) {
+		this.f = f;
+	}
 }

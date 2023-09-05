@@ -2,114 +2,356 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-    <LinearLayout 
+    android:orientation="vertical">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView 
+        android:layout_height="?android:attr/actionBarSize">
+        <TextView
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="主机ip："/>
-        <EditText 
-            android:id="@+id/server_ip_tv"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp"
+            android:text="返回"/>
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="请输入ip"/>
-    </LinearLayout>
-    <LinearLayout 
+            android:layout_centerInParent="true"
+            android:textSize="22sp"
+            android:text="设置"/>
+    </RelativeLayout>
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="主机端口："/>
-        <EditText 
-            android:id="@+id/server_port_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="请输入端口号，如 1500"/>
-    </LinearLayout>
-    
-    <LinearLayout 
-        android:orientation="vertical"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView 
-            android:id="@+id/state_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="状态"/>
-    </LinearLayout>
-    
-    <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button 
-            android:id="@+id/connect_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="连接"/>
-        <Button 
-            android:id="@+id/disconnect_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="断开"/>
-    </LinearLayout>
-    
-    <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:orientation="vertical">
-        <TextView 
-            android:id="@+id/send_text_tv"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="here is send text"/>
-        <TextView 
-            android:id="@+id/receive_text_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="here is receive text"/>
-    </LinearLayout>
-    
-    <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-        <Button 
-            android:id="@+id/send_digit_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="发送数字信号"/>
-        <EditText 
-            android:id="@+id/digit_value_editview"
-            android:layout_width="wrap_content"
-            android:minWidth="60dp"
-            android:layout_height="wrap_content"
-            android:hint="请输入数字信号值"/>
-    </LinearLayout>
-    <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-        <Button 
-            android:id="@+id/send_analog_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="发送模拟信号"/>
-        <EditText 
-            android:id="@+id/analog_value_editview"
-            android:layout_width="wrap_content"
-            android:minWidth="60dp"
-            android:layout_height="wrap_content"
-            android:hint="请输入模拟信号值"/>
-    </LinearLayout>
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="中控系统"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IP地址：" />
+
+                <EditText
+                    android:id="@+id/server_ip_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
+                    android:singleLine="true"
+                    android:hint="请输入IP" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="端口：" />
+
+                <EditText
+                    android:id="@+id/server_port_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
+                    android:singleLine="true"
+                    android:inputType="number"
+                    android:hint="请输入端口号" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/state_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="状态" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/connect_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="连接" />
+
+                <Button
+                    android:id="@+id/disconnect_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="断开" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/send_text_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="here is send text" />
+
+                <TextView
+                    android:id="@+id/receive_text_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="here is receive text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/send_digit_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="发送数字信号" />
+
+                <EditText
+                    android:id="@+id/digit_value_editview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="请输入数字信号值"
+                    android:minWidth="60dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/send_analog_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="发送模拟信号" />
+
+                <EditText
+                    android:id="@+id/analog_value_editview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="请输入模拟信号值"
+                    android:minWidth="60dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="用户界面"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="下载文件地址:http://" />
+
+                <EditText
+                    android:id="@+id/downloadIp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:focusableInTouchMode="true"
+                    android:focusable="true"
+                    android:hint="请输入http地址"
+                    android:minWidth="60dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="下载" />
+
+                <CheckBox
+                    android:id="@+id/open"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="开机自动运行"
+                    android:textSize="20sp" />
+
+                <CheckBox
+                    android:id="@+id/autorun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="开启心跳检测"
+                    android:textSize="20sp" />
+
+                <CheckBox
+                    android:id="@+id/heart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="开启日志记录"
+                    android:textSize="20sp" />
+
+                <CheckBox
+                    android:id="@+id/log"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="界面设置"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="布局模式：" />
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="布局模式"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="横竖屏模式：" />
+
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="横屏"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="提示:横竖屏模式改变后需重启APP后生效" />
+            <TextView
+                android:id="@+id/register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="是否注册 : 未注册" />
+            <TextView
+                android:id="@+id/dens"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="分辨率 : 1920*1080" />
+            <SeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="20dp"
+                android:maxHeight="30dp"/>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

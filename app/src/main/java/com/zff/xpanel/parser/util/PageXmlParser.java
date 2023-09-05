@@ -1,20 +1,12 @@
 package com.zff.xpanel.parser.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.emp.xdcommon.android.log.LogUtils;
+import com.zff.xpanel.parser.cache.Pages;
+import com.zff.xpanel.parser.cache.Subpages;
+import com.zff.xpanel.parser.cache.Themes;
 import com.zff.xpanel.parser.view.ButtonArgs;
 import com.zff.xpanel.parser.view.ButtonArgs.Content;
 import com.zff.xpanel.parser.view.EditTextArgs;
@@ -28,12 +20,21 @@ import com.zff.xpanel.parser.view.TextViewArgs;
 import com.zff.xpanel.parser.view.Theme;
 import com.zff.xpanel.parser.view.VideoArgs;
 import com.zff.xpanel.parser.view.ViewArgs;
-import com.zff.xpanel.parser.view.Page.LinkageEvent;
 import com.zff.xpanel.parser.view.ViewArgs.Type;
 import com.zff.xpanel.parser.view.WebViewArgs;
-import com.zff.xpanel.parser.cache.Pages;
-import com.zff.xpanel.parser.cache.Subpages;
-import com.zff.xpanel.parser.cache.Themes;
+import com.zff.xpanel.parser.view.inflater.Inflater;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class PageXmlParser {
 
@@ -42,12 +43,11 @@ public class PageXmlParser {
     //private Pages mapPages = Pages.getInstant();
     //private Subpages mapSubpages = Subpages.getInstant();
 
-    private boolean isParseSubpage = false;
+    private boolean isParseSubpage = true;
 
     public PageXmlParser() {
     }
 
-    ;
 
     public PageXmlParser(boolean isParseSubpage) {
         this.isParseSubpage = isParseSubpage;
@@ -55,7 +55,7 @@ public class PageXmlParser {
 
 
     public Page parse(String path, String fileName) {
-        Subpage page = null;
+        Page page = null;
         //Subpage subpage = null;
         File file = new File(path, fileName);
         if (file.exists()) {
@@ -78,17 +78,20 @@ public class PageXmlParser {
                             break;
                         } else if (isPage(name)) {
 //                            String pageName = xmlPullParser.getAttributeValue(null, "name");
-                            page = parseSubpage(xmlPullParser);
+//                            page = parseSubpage(xmlPullParser);
+                            page = parsePage(xmlPullParser);
 //                            page.setName(pageName);
                             Pages.getInstant().addPage(page);
                         } else if (isSubpage(name)) {
                             //是解析与page同级的subpage标签还是解析page中的子view subpage标签
                             if (isParseSubpage) {
-                                Subpages.getInstant().addSubpage(parseSubpage(xmlPullParser));
+                                page = parseSubpage(xmlPullParser);
+                                Subpages.getInstant().addSubpage((Subpage) page);
                             } else {
                                 Subpage sbp = parseViewSubpage(xmlPullParser);
-                                sbp = getSubpage(sbp.getName(), sbp.getjId(), sbp.getX(), sbp.getY());
-                                page.addViewArgs(sbp);
+                                sbp = getSubpage(sbp.getName(), sbp.getjId(), sbp.getX(), sbp.getY(), sbp.getV(),sbp.getTrans());
+                                if (page != null)
+                                    page.addViewArgs(sbp);
                             }
                         }
 //                        else if (isTextView(name)) {
@@ -180,19 +183,18 @@ public class PageXmlParser {
                 } else if (isSubpage(tag)) {
                     if (!isParseSubpag) {
                         Subpage sbp = parseViewSubpage(xmlPullParser);
-                        sbp = getSubpage(sbp.getName(), sbp.getjId(), sbp.getX(), sbp.getY());
-
+                        sbp = getSubpage(sbp.getName(), sbp.getjId(), sbp.getX(), sbp.getY(), sbp.getV(),sbp.getTrans());
                         list.add(sbp);
                     }
                 }
             } else if (XmlPullParser.END_TAG == type) {
-                if (isPage(xmlPullParser.getName()) || isLandscape(xmlPullParser.getName())) {
+                if (isPage(xmlPullParser.getName()) || isPortrait(xmlPullParser.getName())) {
                     break;
                 }
             }
 
             try {
-                type = xmlPullParser.nextTag();
+                type = xmlPullParser.next();
             } catch (XmlPullParserException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -212,6 +214,36 @@ public class PageXmlParser {
     }
 
     //如果Subpages中有此Subpage就直接中Subpages中取，否则就解析
+    private Subpage getSubpage(String key, String jId, int subpageX, int subpageY, int v, Page.Trans[] trans) {
+        Subpage subpage = new Subpage();
+        subpage.setName(key);
+        subpage.setjId(jId);
+        subpage.setX(subpageX);
+        subpage.setY(subpageY);
+        subpage.setV(v);
+        subpage.setTrans(trans);
+        //如果Subpages中有此Subpage就直接中Subpages中取，否则就解析
+        if (Subpages.getInstant().containKey(key)) {
+            Subpage tempSp = Subpages.getInstant().getSubpage(key);
+            subpage.setW(tempSp.getW());
+            subpage.setH(tempSp.getH());
+            subpage.setTheme(tempSp.getTheme());
+            subpage.setViewArgsList(tempSp.getViewArgsList());
+        } else {
+            PageXmlParser subPageXmlParser = new PageXmlParser(true);
+            Page p = subPageXmlParser.parse(Constant.SUBPAGES_DIR, key);
+            if (p != null) {
+                Subpage tempSp = (Subpage) p;
+                subpage.setW(tempSp.getW());
+                subpage.setH(tempSp.getH());
+                subpage.setTheme(tempSp.getTheme());
+                subpage.setViewArgsList(tempSp.getViewArgsList());
+            }
+
+        }
+        return subpage;
+    }
+
     private Subpage getSubpage(String key, String jId, int subpageX, int subpageY) {
         Subpage subpage = new Subpage();
         subpage.setName(key);
@@ -226,7 +258,8 @@ public class PageXmlParser {
             subpage.setTheme(tempSp.getTheme());
             subpage.setViewArgsList(tempSp.getViewArgsList());
         } else {
-            Page p = parse(Constant.SUBPAGES_DIR, key);
+            PageXmlParser subPageXmlParser = new PageXmlParser(true);
+            Page p = subPageXmlParser.parse(Constant.SUBPAGES_DIR, key);
             if (p != null) {
                 Subpage tempSp = (Subpage) p;
                 subpage.setW(tempSp.getW());
@@ -254,10 +287,24 @@ public class PageXmlParser {
         page.setW(proper.getDesignerWidth());
 
         String pageName = xmlPullParser.getAttributeValue(null, "name");
+        String jId = xmlPullParser.getAttributeValue(null, "j");
+        String transition = xmlPullParser.getAttributeValue(null, "transition");
+        String subtype = xmlPullParser.getAttributeValue(null, "subtype");
+        String time = xmlPullParser.getAttributeValue(null, "time");
+        String ease = xmlPullParser.getAttributeValue(null, "ease");
+        Page.Trans trans = new Page.Trans(transition, subtype, ease, Integer.parseInt(time));
+
+        page.setTrans(new Page.Trans[]{trans});
         page.setName(pageName);
+        page.setjId(jId);
 
 //		List<ViewArgs> list = parsePageAllChildViewArgs(xmlPullParser, false);
-        Page.LayoutOrientation pageLandscape = parsePageLandscape(xmlPullParser);
+        Page.LayoutOrientation pageLandscape;
+        if (Properties.getInstant().getMoshe() == 0) {
+            pageLandscape = parsePageLandscape(xmlPullParser);
+        } else {
+            pageLandscape = parsePagePortrait(xmlPullParser);
+        }
         page.setViewArgsList(pageLandscape.childList);
         page.setTheme(pageLandscape.layoutTheme);
         page.setChildLinkEventMap(pageLandscape.childLinkEventMap);
@@ -329,6 +376,71 @@ public class PageXmlParser {
         return vargs;
     }
 
+    private Page.LayoutOrientation parsePagePortrait(XmlPullParser xmlPullParser) {
+        Page.LayoutOrientation vargs = new Page.LayoutOrientation();
+
+        String tag = xmlPullParser.getName();
+//		if(!isLandscape(tag)){
+//			return vargs;
+//		}
+        int depth = xmlPullParser.getDepth();
+        int type = 0;
+        try {
+            type = xmlPullParser.getEventType();
+        } catch (XmlPullParserException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        while (XmlPullParser.END_DOCUMENT != type) {
+            tag = xmlPullParser.getName();
+            if (XmlPullParser.START_TAG == type) {
+                if (isPortrait(tag)) {
+                    String themeName = xmlPullParser.getAttributeValue(null, "t");
+                    String jId = xmlPullParser.getAttributeValue(null, "j");
+
+                    if (!TextUtils.isEmpty(themeName)) {
+                        Theme theme = null;
+                        if (Themes.getInstant().containKey(themeName)) {
+                            theme = Themes.getInstant().getTheme(themeName);
+                        } else {
+                            if (!Themes.getInstant().isParseAllTheme()) {
+                                ThemeXmlParser themXmlp = new ThemeXmlParser();
+                                theme = themXmlp.parseTheme(themeName);
+                            }
+                        }
+                        vargs.layoutTheme = theme;
+                    }
+                    Page.LayoutOrientation pageLay = parsePageAllChildViewArgs(vargs, xmlPullParser, false);
+                    vargs.childList = pageLay.childList;
+                }
+
+            } else if (XmlPullParser.TEXT == type) {
+                String text = xmlPullParser.getText();
+            } else if (XmlPullParser.END_TAG == type) {
+                if (isPortrait(xmlPullParser.getName())) {
+                    break;
+                }
+            }
+            //next
+            try {
+                type = xmlPullParser.next();
+            } catch (XmlPullParserException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            try {
+                type = xmlPullParser.getEventType();
+            } catch (XmlPullParserException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+        return vargs;
+    }
+
     //解析与page同级的subpage
     private Subpage parseSubpage(XmlPullParser pullParser) {
         Subpage sbp = new Subpage();
@@ -339,12 +451,12 @@ public class PageXmlParser {
         String pageName = pullParser.getAttributeValue(null, "name");
         sbp.setName(pageName);
         try {
-            sbp.setW(Integer.valueOf(pullParser.getAttributeValue(null, "w")));
+            sbp.setW(Integer.parseInt(pullParser.getAttributeValue(null, "w")));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
         try {
-            sbp.setH(Integer.valueOf(pullParser.getAttributeValue(null, "h")));
+            sbp.setH(Integer.parseInt(pullParser.getAttributeValue(null, "h")));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -376,16 +488,43 @@ public class PageXmlParser {
         Subpage sbp = new Subpage();
         String pageName = pullParser.getAttributeValue(null, "name");
         sbp.setName(pageName);
+        String transition = pullParser.getAttributeValue(null, "transition1");
+        String subtype = pullParser.getAttributeValue(null, "subtype1");
+        String time = pullParser.getAttributeValue(null, "time1");
+        String ease = pullParser.getAttributeValue(null, "ease1");
+
+        String transition2 = pullParser.getAttributeValue(null, "transition2");
+        String subtype2 = pullParser.getAttributeValue(null, "subtype2");
+        String time2 = pullParser.getAttributeValue(null, "time2");
+        String ease2 = pullParser.getAttributeValue(null, "ease2");
+        int iTime=0;
+        int iTime2=0;
         try {
-            sbp.setX(Integer.valueOf(pullParser.getAttributeValue(null, "x")));
+            if (!TextUtils.isEmpty(pullParser.getAttributeValue(null, "x"))) {
+                sbp.setX(Integer.parseInt(pullParser.getAttributeValue(null, "x")));
+            }
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
         try {
-            sbp.setY(Integer.valueOf(pullParser.getAttributeValue(null, "y")));
+            if (!TextUtils.isEmpty(pullParser.getAttributeValue(null, "y")))
+                sbp.setY(Integer.parseInt(pullParser.getAttributeValue(null, "y")));
+            if (!TextUtils.isEmpty(pullParser.getAttributeValue(null, "v")))
+                sbp.setV(Integer.parseInt(pullParser.getAttributeValue(null, "v")));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
+        try {
+            if (!TextUtils.isEmpty(time))
+                iTime = Integer.parseInt(time);
+            if (!TextUtils.isEmpty(time2))
+                iTime2 = Integer.parseInt(time2);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        Page.Trans trans = new Page.Trans(transition, subtype, ease, iTime);
+        Page.Trans trans2 = new Page.Trans(transition2, subtype2, ease2, iTime2);
+        sbp.setTrans(new Page.Trans[]{trans,trans2});
         sbp.setjId(pullParser.getAttributeValue(null, "j"));
         sbp.setType(Type.SUBPAGE);
         return sbp;
@@ -489,22 +628,22 @@ public class PageXmlParser {
         vargs.setjId(jId);
         vargs.setFlip(flip);
         try {
-            vargs.setW(Integer.valueOf(w));
+            vargs.setW(Integer.parseInt(w));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
         try {
-            vargs.setH(Integer.valueOf(h));
+            vargs.setH(Integer.parseInt(h));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
         try {
-            vargs.setX(Integer.valueOf(x));
+            vargs.setX(Integer.parseInt(x));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
         try {
-            vargs.setY(Integer.valueOf(y));
+            vargs.setY(Integer.parseInt(y));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -628,7 +767,9 @@ public class PageXmlParser {
                     String h = xmlPullParser.getAttributeValue(null, "h");
                     String x = xmlPullParser.getAttributeValue(null, "x");
                     String y = xmlPullParser.getAttributeValue(null, "y");
+                    String jId = xmlPullParser.getAttributeValue(null, "j");
                     String themeName = xmlPullParser.getAttributeValue(null, "t");
+                    String clickthrough = xmlPullParser.getAttributeValue(null, "clickthrough");
                     if (!TextUtils.isEmpty(themeName)) {
                         Theme theme = null;
                         if (Themes.getInstant().containKey(themeName)) {
@@ -641,7 +782,8 @@ public class PageXmlParser {
                         }
                         vargs.setTheme(theme);
                     }
-
+                    vargs.setClickthrough(clickthrough);
+                    vargs.setjId(jId);
                     vargs.setType(Type.IMG);
                     try {
                         vargs.setW(Integer.valueOf(w));
@@ -723,6 +865,8 @@ public class PageXmlParser {
                     String jId = xmlPullParser.getAttributeValue(null, "j");
                     String flip = xmlPullParser.getAttributeValue(null, "flip");
                     String themeName = xmlPullParser.getAttributeValue(null, "t");
+                    String cmd = xmlPullParser.getAttributeValue(null, "cmd");
+                    String macro = xmlPullParser.getAttributeValue(null, "macro");
                     String sim = xmlPullParser.getAttributeValue(null, "sim");//0普通，1模拟反馈，2模拟反馈-自锁按钮
                     if (!TextUtils.isEmpty(themeName)) {
                         Theme theme = null;
@@ -739,29 +883,36 @@ public class PageXmlParser {
                     vargs.setType(Type.BUTTON);
                     vargs.setjId(jId);
                     vargs.setFlip(flip);
+                    vargs.setSim(Integer.parseInt(sim.trim()));
+                    vargs.setCmd(cmd);
+                    vargs.setMicro(macro);
+
 
                     try {
-                        vargs.setW(Integer.valueOf(w));
+                        vargs.setW(Integer.parseInt(w));
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
                     try {
-                        vargs.setH(Integer.valueOf(h));
+                        vargs.setH(Integer.parseInt(h));
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
                     try {
-                        vargs.setX(Integer.valueOf(x));
+                        vargs.setX(Integer.parseInt(x));
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
                     try {
-                        vargs.setY(Integer.valueOf(y));
+                        vargs.setY(Integer.parseInt(y));
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
                 } else if (isActiveTag(tag)) {
-                    vargs.setActiveContent(parseActiveContent(xmlPullParser));
+                    Content activeContent = parseActiveContent(xmlPullParser);
+                    if (activeContent != null)
+                        vargs.setS(activeContent.s);
+                    vargs.setActiveContent(activeContent);
                 } else if (isInactiveTag(tag)) {
                     vargs.setInactiveContent(parseInactiveContent(xmlPullParser));
                 }
@@ -777,7 +928,7 @@ public class PageXmlParser {
             }
             //next
             try {
-                type = xmlPullParser.nextTag();
+                type = xmlPullParser.next();
             } catch (XmlPullParserException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -814,6 +965,7 @@ public class PageXmlParser {
                 tag = xmlPullParser.getName();
                 if (isActiveTag(tag)) {
                     String s = xmlPullParser.getAttributeValue(null, "s");
+                    content.s = s;
                 } else if (isImageView(tag)) {
                     ImgViewArgs imgArgs = parseImageViewArgs(xmlPullParser);
                     content.imgX = imgArgs.getX();
@@ -827,6 +979,9 @@ public class PageXmlParser {
                 }
             } else if (XmlPullParser.TEXT == type) {
                 String text = xmlPullParser.getText();
+                if(text.contains("按钮测试")){
+                    LogUtils.e(TAG,"按钮测试");
+                }
                 if (isActiveTag(tag)) {
                     content.text = text;
                 }
@@ -964,6 +1119,10 @@ public class PageXmlParser {
                     String titleSub = xmlPullParser.getAttributeValue(null, "titleSub");
                     String contentSub = xmlPullParser.getAttributeValue(null, "contentSub");
                     String footerSub = xmlPullParser.getAttributeValue(null, "footerSub");
+                    String orientation = xmlPullParser.getAttributeValue(null, "orientation");
+                    if (!TextUtils.isEmpty(orientation)) {
+                        vargs.setOrientation(orientation);
+                    }
                     if (!TextUtils.isEmpty(headSub)) {
                         vargs.setHeaderSub(getSubpage(headSub, "", vargs.getX(), vargs.getY()));
                     }
@@ -1090,7 +1249,7 @@ public class PageXmlParser {
             }
             //next
             try {
-                type = xmlPullParser.nextTag();
+                type = xmlPullParser.next();
             } catch (XmlPullParserException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -1132,18 +1291,29 @@ public class PageXmlParser {
                     setBaseArgs(vargs, xmlPullParser);
                     String max = xmlPullParser.getAttributeValue(null, "max");
                     try {
-                        vargs.setmMax(Integer.valueOf(max));
+                        vargs.setmMax(Integer.parseInt(max));
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
                 } else if (thumbTag.equals(tag)) {
                     SliderArgs.Indicator indicator = new SliderArgs.Indicator();
-                    vargs.setIndicator(indicator);
+                    if(xmlPullParser.getAttributeValue(null, "state").equals("0")){
+                        vargs.setIndicator(indicator);
+                    }else {
+                        vargs.setActiveindicator(indicator);
+                    }
                 }
             } else if (XmlPullParser.TEXT == type) {
                 if (thumbTag.equals(tag)) {
                     String text = xmlPullParser.getText();
-                    vargs.getIndicator().imgPath = text;
+                    if (!TextUtils.isEmpty(text)&&!TextUtils.isEmpty(text.trim())){
+                        if(vargs.getIndicator()!=null&&vargs.getActiveindicator()==null)
+                            vargs.getIndicator().imgPath = text;
+                        if(vargs.getActiveindicator()!=null){
+                            vargs.getActiveindicator().imgPath = text;
+                        }
+                    }
+
                 }
             } else if (XmlPullParser.END_TAG == type) {
                 if (isSeekBar(xmlPullParser.getName()) || depth == xmlPullParser.getDepth()) {
@@ -1152,7 +1322,7 @@ public class PageXmlParser {
             }
             //next
             try {
-                type = xmlPullParser.nextTag();
+                type = xmlPullParser.next();
             } catch (XmlPullParserException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -1254,8 +1424,12 @@ public class PageXmlParser {
                     setBaseArgs(vargs, xmlPullParser);
                     String pass = xmlPullParser.getAttributeValue(null, "pass");
                     String autoFocus = xmlPullParser.getAttributeValue(null, "autoFocus");
+                    String s = xmlPullParser.getAttributeValue(null, "s");
+                    String f = xmlPullParser.getAttributeValue(null, "f");
+                    vargs.setS(s);
                     vargs.setPass(!"0".equals(pass));
                     vargs.setAutoFocus(!"0".equals(autoFocus));
+                    vargs.setF(f);
                 }
             } else if (XmlPullParser.TEXT == type) {
                 String text = xmlPullParser.getText();
@@ -1267,7 +1441,7 @@ public class PageXmlParser {
             }
             //next
             try {
-                type = xmlPullParser.nextTag();
+                type = xmlPullParser.next();
             } catch (XmlPullParserException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

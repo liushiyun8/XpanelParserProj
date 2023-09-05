@@ -4,10 +4,12 @@
     android:id="@+id/container_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="test seekbar"/>
+   <org.videolan.vlc.widget.VerticalSeekBar
+       android:id="@+id/verBar"
+       android:layout_width="10dp"
+       android:layout_height="100dp"
+       />
 
 </LinearLayout>

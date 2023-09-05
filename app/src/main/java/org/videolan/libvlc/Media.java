@@ -409,7 +409,7 @@ public class Media extends VLCObject<Media.Event> {
     private static final int PARSE_STATUS_PARSED = 0x02;
 
     private Uri mUri = null;
-    private MediaList mSubItems = null;
+    private org.videolan.libvlc.MediaList mSubItems = null;
     private int mParseStatus = PARSE_STATUS_INIT;
     private final String mNativeMetas[] = new String[Meta.MAX];
     private Track mNativeTracks[] = null;
@@ -427,7 +427,7 @@ public class Media extends VLCObject<Media.Event> {
     public Media(LibVLC libVLC, String path) {
         super(libVLC);
         nativeNewFromPath(libVLC, path);
-        mUri = VLCUtil.UriFromMrl(nativeGetMrl());
+        mUri = org.videolan.libvlc.util.VLCUtil.UriFromMrl(nativeGetMrl());
     }
 
     /**
@@ -438,7 +438,7 @@ public class Media extends VLCObject<Media.Event> {
      */
     public Media(LibVLC libVLC, Uri uri) {
         super(libVLC);
-        nativeNewFromLocation(libVLC, VLCUtil.encodeVLCUri(uri));
+        nativeNewFromLocation(libVLC, org.videolan.libvlc.util.VLCUtil.encodeVLCUri(uri));
         mUri = uri;
     }
 
@@ -451,7 +451,7 @@ public class Media extends VLCObject<Media.Event> {
     public Media(LibVLC libVLC, FileDescriptor fd) {
         super(libVLC);
         nativeNewFromFd(libVLC, fd);
-        mUri = VLCUtil.UriFromMrl(nativeGetMrl());
+        mUri = org.videolan.libvlc.util.VLCUtil.UriFromMrl(nativeGetMrl());
     }
 
     /**
@@ -459,7 +459,7 @@ public class Media extends VLCObject<Media.Event> {
      * @param ml Should not be released and locked
      * @param index index of the Media from the MediaList
      */
-    protected Media(MediaList ml, int index) {
+    protected Media(org.videolan.libvlc.MediaList ml, int index) {
         super(ml);
         if (ml == null || ml.isReleased())
             throw new IllegalArgumentException("MediaList is null or released");
@@ -543,14 +543,14 @@ public class Media extends VLCObject<Media.Event> {
      *
      * @return subItems as a MediaList. This MediaList should be released with {@link #release()}.
      */
-    public MediaList subItems() {
+    public org.videolan.libvlc.MediaList subItems() {
         synchronized (this) {
             if (mSubItems != null) {
                 mSubItems.retain();
                 return mSubItems;
             }
         }
-        final MediaList subItems = new MediaList(this);
+        final org.videolan.libvlc.MediaList subItems = new org.videolan.libvlc.MediaList(this);
         synchronized (this) {
             mSubItems = subItems;
             mSubItems.retain();
@@ -735,15 +735,15 @@ public class Media extends VLCObject<Media.Event> {
      * @param force force hw acceleration even for unknown devices
      */
     public void setHWDecoderEnabled(boolean enabled, boolean force) {
-        HWDecoderUtil.Decoder decoder = enabled ?
-                HWDecoderUtil.getDecoderFromDevice() :
-                HWDecoderUtil.Decoder.NONE;
+        org.videolan.libvlc.util.HWDecoderUtil.Decoder decoder = enabled ?
+                org.videolan.libvlc.util.HWDecoderUtil.getDecoderFromDevice() :
+                org.videolan.libvlc.util.HWDecoderUtil.Decoder.NONE;
 
         /* Unknown device but the user asked for hardware acceleration */
-        if (decoder == HWDecoderUtil.Decoder.UNKNOWN && force)
-            decoder = HWDecoderUtil.Decoder.ALL;
+        if (decoder == org.videolan.libvlc.util.HWDecoderUtil.Decoder.UNKNOWN && force)
+            decoder = org.videolan.libvlc.util.HWDecoderUtil.Decoder.ALL;
 
-        if (decoder == HWDecoderUtil.Decoder.NONE || decoder == HWDecoderUtil.Decoder.UNKNOWN) {
+        if (decoder == org.videolan.libvlc.util.HWDecoderUtil.Decoder.NONE || decoder == org.videolan.libvlc.util.HWDecoderUtil.Decoder.UNKNOWN) {
             addOption(":codec=all");
             return;
         }
@@ -761,9 +761,9 @@ public class Media extends VLCObject<Media.Event> {
         addOption(":network-caching=1500");
 
         final StringBuilder sb = new StringBuilder(":codec=");
-        if (decoder == HWDecoderUtil.Decoder.MEDIACODEC || decoder == HWDecoderUtil.Decoder.ALL)
+        if (decoder == org.videolan.libvlc.util.HWDecoderUtil.Decoder.MEDIACODEC || decoder == org.videolan.libvlc.util.HWDecoderUtil.Decoder.ALL)
             sb.append(getMediaCodecModule()).append(",");
-        if (force && (decoder == HWDecoderUtil.Decoder.OMX || decoder == HWDecoderUtil.Decoder.ALL))
+        if (force && (decoder == org.videolan.libvlc.util.HWDecoderUtil.Decoder.OMX || decoder == HWDecoderUtil.Decoder.ALL))
             sb.append("iomx,");
         sb.append("all");
 

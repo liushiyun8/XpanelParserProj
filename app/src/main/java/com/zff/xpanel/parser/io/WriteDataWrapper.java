@@ -1,5 +1,8 @@
 package com.zff.xpanel.parser.io;
 
+import java.nio.charset.Charset;
+import java.util.Arrays;
+
 public class WriteDataWrapper {
 	
 	public static final byte WRITE_HEAD_1 = 0x1b;
@@ -35,6 +38,33 @@ public class WriteDataWrapper {
 		bytes[7] = value;
 		return bytes;
 	}
+
+	//组装同步指令
+	public static byte[] packWriteSyncData(){
+		byte[] bytes = new byte[8];
+		bytes[0] = WRITE_HEAD_1;
+		bytes[1] = WRITE_HEAD_2;
+		bytes[2] = WRITE_TYPE_DIGIT_SIGNAL;
+		bytes[3] = WRITE_TYPE_BODY_1;
+		bytes[4] = WRITE_TYPE_BODY_2;
+		bytes[5] = 0x20;
+		bytes[6] = 0x1f;
+		bytes[7] = (byte) 0x80;
+		return bytes;
+	}
+	//组装心跳包
+	public static byte[] packHeartData(){
+		byte[] bytes = new byte[8];
+		bytes[0] = WRITE_HEAD_1;
+		bytes[1] = WRITE_HEAD_2;
+		bytes[2] = (byte) 0xa5;
+		bytes[3] = WRITE_TYPE_BODY_1;
+		bytes[4] = WRITE_TYPE_BODY_2;
+		bytes[5] = 0x00;
+		bytes[6] = 0x00;
+		bytes[7] = (byte) 0x00;
+		return bytes;
+	}
 	
 	//组装模拟信号数据
 	public static byte[] packWriteAnalogData(int joinNum, int analogValue){
@@ -57,17 +87,28 @@ public class WriteDataWrapper {
 	//组装字符串信号
 	// 还没写完
 	public static byte[] packWriteStringData(int joinNum, String message){
-		byte[] bytes = new byte[8];
+		byte[] unicodes1 = message.getBytes(Charset.forName("unicode"));
+		byte[] unicodes = Arrays.copyOfRange(unicodes1,2,unicodes1.length);
+		byte[] bytes = new byte[9+unicodes.length];
 		bytes[0] = WRITE_HEAD_1;
 		bytes[1] = WRITE_HEAD_2;
-		bytes[2] = WRITE_TYPE_DIGIT_SIGNAL;
+		bytes[2] = WRITE_TYPE_STRING_SIGNAL;
 		bytes[3] = WRITE_TYPE_BODY_1;
 		bytes[4] = WRITE_TYPE_BODY_2;
 		//字符串信号下发时+4000，解析时减去4000
-		byte[] joinNumByte = ByteConvertUtil.intToByte(joinNum + 4000);
+		byte[] joinNumByte = ByteConvertUtil.intToByte(joinNum + 3000);
 		bytes[5] = joinNumByte[0];
 		bytes[6] = joinNumByte[1];
-		bytes[7] = 0;
+		bytes[7] = (byte) unicodes.length;
+		byte sum = 0;
+		for (int i = 0; i < unicodes.length; i++) {
+			sum^=unicodes[i];
+		}
+		bytes[8] =sum;
+//		for (int i = 0; i < unicodes.length; i++) {
+//			unicodes[i]=(byte)((unicodes[i]>>4)&0x0f|(unicodes[i]<<4)&0xf0);
+//		}
+		System.arraycopy(unicodes,0,bytes,9,unicodes.length);
 		return bytes;
 	}
 }

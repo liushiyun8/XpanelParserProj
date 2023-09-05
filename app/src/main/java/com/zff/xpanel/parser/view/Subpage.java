@@ -7,6 +7,7 @@ public class Subpage extends Page{
 	//<subpage name="fenqu3" x="0" y="165" j="715" transition1="None" subtype1="None" time1="0" ease1="" transition2="None" subtype2="None" time2="0" ease2="" clickthrough="0" topmost="0" v="0" l="0" />
 	
 	private boolean isSetWidth = false, isSetHight = false;
+	private int v;
 	
 	
 	
@@ -30,6 +31,14 @@ public class Subpage extends Page{
 		// TODO Auto-generated method stub
 		super.setH(h);
 		isSetHight = true;
+	}
+
+	public int getV() {
+		return v;
+	}
+
+	public void setV(int v) {
+		this.v = v;
 	}
 
 	/**
